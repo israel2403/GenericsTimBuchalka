@@ -3,21 +3,35 @@ package generics.part1;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Team<T> {
+record Affiliation(String name, String type, String countryCode) {
+    @Override
+    public String toString() {
+        return name + " (" + type + " in " + countryCode + ")";
+    }
+}
+
+public class Team<T extends Player, S> {
 
     private String teamName;
     private List<T> teamMembers = new ArrayList<>();
     private int totalWins;
     private int totalLosses;
     private int totalTies;
+    private S affiliation;
 
     public Team(String teamName) {
         this.teamName = teamName;
     }
 
+    public Team(String teamName, S affiliation) {
+        this.teamName = teamName;
+        this.affiliation = affiliation;
+    }
+
     /**
      * Adds a team member to the team. If the team member is already on the team,
      * does nothing.
+     * 
      * @param t the team member to add
      */
     public void addTeamMember(T t) {
@@ -28,8 +42,11 @@ public class Team<T> {
     }
 
     public void listTeamMembers() {
-        System.out.println(teamName + " Roster:");
-        System.out.println(teamMembers);
+        System.out.print(teamName + " Roster:");
+        System.out.println(affiliation == null ? "" : "AFFILIATION" + affiliation);
+        for (T t : teamMembers) {
+            System.out.println(t.name());
+        }
     }
 
     public int ranking() {
